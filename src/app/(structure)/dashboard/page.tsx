@@ -18,6 +18,9 @@ import {
 import { useState } from "react";
 import { MOCK_PATIENT, MOODS, CATEGORY_COLORS } from "@/src/data/patient";
 import { MoodType } from "@/src/types/patient";
+import Modal from "@/src/components/modals/modal";
+import ReminderModal from "../add-task/page";
+
 
 export default function Page() {
   const [tasks, setTasks] = useState(MOCK_PATIENT.tasks);
@@ -28,6 +31,7 @@ export default function Page() {
   const total = tasks.length;
   const progress = Math.round((completed / total) * 100);
   const nextReminder = MOCK_PATIENT.reminders.find((r) => !r.sent);
+
 
   const filteredTasks =
     selectedFilter === "all"
@@ -41,14 +45,15 @@ export default function Page() {
       prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
     );
   };
+  const [isReminderOpen, setIsReminderOpen] = useState(false);
 
   return (
     <div className="flex w-full flex-col gap-6 rounded-xl">
       <Header
         title="Patient Overview"
-        buttonText="Add Reminder"
+        buttonText="Add Task"
         buttonIcon={<Plus size={18} />}
-        buttonOnClick={() => {}}
+        buttonOnClick={() => setIsReminderOpen(true)}
         summary={
           <div className="text-muted-foreground flex gap-1 text-base font-semibold">
             Monitoring{" "}
@@ -333,6 +338,9 @@ export default function Page() {
           </CardContent>
         </Card>
       </div>
+      <Modal isOpen={isReminderOpen}>
+  <ReminderModal setModalOpen={setIsReminderOpen} />
+</Modal>
     </div>
   );
 }
