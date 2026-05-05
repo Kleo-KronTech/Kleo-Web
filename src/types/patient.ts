@@ -25,4 +25,12 @@ export type Patient = {
   moodReportedAgo: string;
   tasks: Task[];
   reminders: Reminder[];
+  phone: string;
+  address: string;
+  diagnosis: string;
+  assignedSince: string;
+  emergencyContact: string;
+  notes: string;
+  weeklyMoods: { day: string; mood: MoodType }[];
+  
 };

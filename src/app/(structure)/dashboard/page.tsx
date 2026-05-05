@@ -20,7 +20,7 @@ import { MOCK_PATIENT, MOODS, CATEGORY_COLORS } from "@/src/data/patient";
 import { MoodType } from "@/src/types/patient";
 import Modal from "@/src/components/modals/modal";
 import ReminderModal from "../add-task/page";
-
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [tasks, setTasks] = useState(MOCK_PATIENT.tasks);
@@ -32,6 +32,7 @@ export default function Page() {
   const progress = Math.round((completed / total) * 100);
   const nextReminder = MOCK_PATIENT.reminders.find((r) => !r.sent);
 
+  const router = useRouter();
 
   const filteredTasks =
     selectedFilter === "all"
@@ -124,7 +125,7 @@ export default function Page() {
       <div className="grid grid-cols-[1.4fr_1fr] grid-rows-[auto_1fr] gap-6">
         <Card className="p-4">
           <CardContent className="p-0 flex flex-col gap-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => router.push("/patient")}>
               <div className="w-11 h-11 rounded-full bg-[#ebe8ff] flex items-center justify-center font-semibold text-[#5e54b8]">
                 {MOCK_PATIENT.initials}
               </div>
