@@ -7,7 +7,7 @@ import { Separator } from "@/src/components/ui/separator";
 import { Pencil, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { MOCK_PATIENT, MOODS, CATEGORY_COLORS } from "@/src/data/patient";
+import { MOCK_PATIENT, MOODS } from "@/src/data/patient";
 import { MoodType } from "@/src/types/patient";
 
 const MOOD_COLORS: Record<MoodType, string> = {
@@ -21,9 +21,6 @@ const MOOD_COLORS: Record<MoodType, string> = {
 export default function PatientPage() {
   const router = useRouter();
   const [selectedMood, setSelectedMood] = useState<MoodType>(MOCK_PATIENT.mood);
-
-  const completed = MOCK_PATIENT.tasks.filter((t) => t.completed).length;
-  const total = MOCK_PATIENT.tasks.length;
 
   return (
     <div className="flex w-full flex-col gap-6">
