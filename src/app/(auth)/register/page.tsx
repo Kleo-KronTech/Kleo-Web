@@ -13,6 +13,7 @@ import { Input } from "@/src/components/ui/input";
 import { useForm } from "react-hook-form";
 import validator from "validator";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
 
 const schema = z
   .object({
@@ -48,6 +49,9 @@ const schema = z
 type FormValues = z.infer<typeof schema>;
 
 export default function RegisterPage() {
+  
+const router = useRouter();
+
   const form = useForm<FormValues>({
     resolver: async (values) => {
       const result = schema.safeParse(values);
@@ -82,10 +86,41 @@ export default function RegisterPage() {
     mode: "onBlur",
   });
 
-  function onSubmit(data: FormValues) {
-    console.log("Register data:", data);
-    //connect to api
+  async function onSubmit(data: FormValues) {
+  try {
+    const response = await fetch("http://localhost:3000/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: data.username,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Register failed");
+    }
+
+    console.log("Registered:", result);
+
+
+//     const text = await response.text();
+
+// console.log(text);
+
+    //redirect?
+    router.push("/login");
+  } catch (error) {
+    console.error(error);
   }
+}
 
   return (
     <AuthLayout title="Register" form={form} onSubmit={onSubmit}>

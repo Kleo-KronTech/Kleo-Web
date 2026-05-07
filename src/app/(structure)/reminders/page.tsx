@@ -71,6 +71,7 @@ export default function RemindersPage() {
 
       <div className="grid grid-cols-[1.4fr_1fr] grid-rows-[auto_auto] gap-6">
 
+
         <Card className="p-5">
           <CardContent className="p-0 flex flex-col gap-4">
             <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">
