@@ -46,18 +46,60 @@ export default function ReminderModal({ setModalOpen, onSuccess }: Props) {
       prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
     );
 
-  const handleCreate = () => {
-    if (!text.trim()) return;
-    console.log({
-      text,
-      date: selectedDate,
-      time: `${hours}:${minutes} ${period}`,
-      category: selectedCategory,
-      repeatDays,
+  const handleCreate = async () => {
+  if (!text.trim()) return;
+
+  try {
+    const selectedFullDate = WEEK_DATES.find(
+      (d) => d.getDate() === selectedDate
+    );
+
+    if (!selectedFullDate) return;
+
+    let hour24 = parseInt(hours);
+
+    if (period === "PM" && hour24 < 12) {
+      hour24 += 12;
+    }
+
+    if (period === "AM" && hour24 === 12) {
+      hour24 = 0;
+    }
+
+    const reminderDate = new Date(selectedFullDate);
+
+    reminderDate.setHours(hour24);
+    reminderDate.setMinutes(parseInt(minutes));
+    reminderDate.setSeconds(0);
+
+    const response = await fetch("http://localhost:3000/reminders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text,
+        category: selectedCategory,
+        reminderDate: reminderDate.toISOString(),
+        repeatDays,
+      }),
     });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to create reminder");
+    }
+
+    console.log("Reminder created:", result);
+
     setModalOpen(false);
     onSuccess?.();
-  };
+
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
     <div className="w-full">
