@@ -13,13 +13,12 @@ import {
   Send,
   ClipboardList,
   CalendarClock,
-  Pencil,
 } from "lucide-react";
 import { useState } from "react";
 import { MOCK_PATIENT, MOODS, CATEGORY_COLORS } from "@/src/data/patient";
 import { MoodType } from "@/src/types/patient";
 import Modal from "@/src/components/modals/modal";
-import ReminderModal from "../add-task/page";
+import ReminderModal from "@/src/components/modals/reminder-modal";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
@@ -340,7 +339,8 @@ export default function Page() {
         </Card>
       </div>
       <Modal isOpen={isReminderOpen}>
-  <ReminderModal setModalOpen={setIsReminderOpen} />
+  <ReminderModal setModalOpen={setIsReminderOpen}
+   />
 </Modal>
     </div>
   );

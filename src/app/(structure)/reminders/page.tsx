@@ -8,7 +8,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { MOCK_PATIENT } from "@/src/data/patient";
 import Modal from "@/src/components/modals/modal";
-//import ReminderModal from "@/src/components/modals/reminder-modal";
+import ReminderModal from "@/src/components/modals/reminder-modal";
 
 type Reminder = {
   id: string;
@@ -234,9 +234,9 @@ export default function RemindersPage() {
 
       </div>
 
-      {/* <Modal isOpen={isModalOpen}>
+      <Modal isOpen={isModalOpen}>
         <ReminderModal setModalOpen={setIsModalOpen} />
-      </Modal> */}
+      </Modal>
     </div>
   );
 }

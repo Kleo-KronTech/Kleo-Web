@@ -29,7 +29,7 @@ const NAV_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/patient', label: 'Patient', icon: UserRound },
   { href: '/reminders', label: 'Reminders', icon: Bell },
-  { href: '/tasks', label: 'Tasks', icon: ClipboardList },
+  { href: '/?', label: '?', icon: ClipboardList },
   { href: '/location', label: 'Location', icon: MapPin },
 ];
 
