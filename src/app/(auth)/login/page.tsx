@@ -12,6 +12,7 @@ import { Input } from "@/src/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import validator from "validator";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   email: z
@@ -26,6 +27,7 @@ const schema = z.object({
 });
 
 export default function LoginPage() {
+  const router = useRouter();
   const form = useForm({
     defaultValues: {
       email: "",
@@ -34,13 +36,42 @@ export default function LoginPage() {
     mode: "onBlur",
   });
 
-  function onSubmit(data: z.infer<typeof schema>) {
-    const result = schema.safeParse(data);
-    if (!result.success) return;
+  async function onSubmit(data: z.infer<typeof schema>) {
+  const result = schema.safeParse(data);
 
-    console.log("Login data:", result.data);
-    //connect to api
+  if (!result.success) {
+    console.log(result.error.format());
+    return;
   }
+
+  try {
+    const response = await fetch("http://localhost:3000/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: result.data.email,
+        password: result.data.password,
+      }),
+    });
+
+    const loginResult = await response.json();
+
+    if (!response.ok) {
+      throw new Error(loginResult.message || "Login failed");
+    }
+
+    console.log("Logged in:", loginResult);
+
+    localStorage.setItem("token", loginResult.token);
+
+    router.push("/dashboard");
+
+  } catch (error) {
+    console.error(error);
+  }
+}
 
   return (
     <AuthLayout title="Login" form={form} onSubmit={onSubmit}>
