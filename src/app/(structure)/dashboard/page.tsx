@@ -20,11 +20,13 @@ import { MoodType } from "@/src/types/patient";
 import Modal from "@/src/components/modals/modal";
 import ReminderModal from "@/src/components/modals/reminder-modal";
 import { useRouter } from "next/navigation";
+import SendMessageModal from "@/src/components/modals/send-message-modal";
 
 export default function Page() {
   const [tasks, setTasks] = useState(MOCK_PATIENT.tasks);
   const [selectedMood, setSelectedMood] = useState<MoodType>(MOCK_PATIENT.mood);
   const [selectedFilter, setSelectedFilter] = useState("all");
+  const [isMessageOpen, setIsMessageOpen] = useState(false);
 
   const completed = tasks.filter((t) => t.completed).length;
   const total = tasks.length;
@@ -124,7 +126,10 @@ export default function Page() {
       <div className="grid grid-cols-[1.4fr_1fr] grid-rows-[auto_1fr] gap-6">
         <Card className="p-4">
           <CardContent className="p-0 flex flex-col gap-4">
-            <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => router.push("/patient")}>
+            <div
+              className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => router.push("/patient")}
+            >
               <div className="w-11 h-11 rounded-full bg-[#ebe8ff] flex items-center justify-center font-semibold text-[#5e54b8]">
                 {MOCK_PATIENT.initials}
               </div>
@@ -293,6 +298,7 @@ export default function Page() {
                   icon: <Send size={16} />,
                   label: "Send message",
                   sub: "Notify Maria directly",
+                  onClick: () => setIsMessageOpen(true),
                 },
                 {
                   icon: <Plus size={16} />,
@@ -323,7 +329,7 @@ export default function Page() {
                 <button
                   key={action.label}
                   className="flex flex-col items-start gap-1 px-3 py-3 rounded-xl border border-border bg-muted hover:border-[#5e54b8]/50 hover:bg-[#ebe8ff]/30 transition-all text-left"
-                  onClick={() => {}}
+                  onClick={action.onClick ?? (() => {})}
                 >
                   <span className="text-[#5e54b8]">{action.icon}</span>
                   <span className="text-sm font-medium text-foreground">
@@ -339,9 +345,11 @@ export default function Page() {
         </Card>
       </div>
       <Modal isOpen={isReminderOpen}>
-  <ReminderModal setModalOpen={setIsReminderOpen}
-   />
-</Modal>
+        <ReminderModal setModalOpen={setIsReminderOpen} />
+      </Modal>
+      <Modal isOpen={isMessageOpen}>
+        <SendMessageModal setModalOpen={setIsMessageOpen} />
+      </Modal>
     </div>
   );
 }
